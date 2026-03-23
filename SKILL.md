@@ -81,7 +81,7 @@ export GH_TOKEN="ghu_xxx"  # GitHub OAuth token
 |----------|---------|-------------|
 | `GITHUB_COPILOT_TOKEN` | - | Direct Copilot token |
 | `GH_TOKEN` / `GITHUB_TOKEN` | - | GitHub Token (for token refresh) |
-| `http_proxy` / `https_proxy` | `http://127.0.0.1:1087` | Proxy (required for OAuth) |
+| `http_proxy` / `https_proxy` | - | Proxy URL (required for OAuth, must reach GitHub) |
 
 ## Supported Models
 

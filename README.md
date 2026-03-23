@@ -142,12 +142,9 @@ node scripts/index.js chat "Hello" --model gemini-2.5-pro
 ## Environment Variables
 
 ```bash
-# Proxy (required for OAuth)
-export http_proxy=http://127.0.0.1:1087
-export https_proxy=http://127.0.0.1:1087
-
-# Or use another proxy
+# Proxy (required for OAuth, must be able to reach GitHub)
 export http_proxy=http://your-proxy:8080
+export https_proxy=http://your-proxy:8080
 
 # Manual token (skip OAuth)
 export GITHUB_COPILOT_TOKEN="your-token"

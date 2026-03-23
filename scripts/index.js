@@ -82,11 +82,12 @@ async function curlRequest(url, opts = {}) {
   }
   args.push('--max-time', String(timeout));
 
-  // Proxy support
-  const httpProxy = process.env.http_proxy || process.env.HTTP_PROXY;
-  const httpsProxy = process.env.https_proxy || process.env.HTTPS_PROXY;
-  if (httpsProxy || httpProxy) {
-    args.push('-x', httpsProxy || httpProxy);
+  const httpProxy = process.env.http_proxy || process.env.HTTP_PROXY || null;
+  const httpsProxy = process.env.https_proxy || process.env.HTTPS_PROXY || null;
+  if (httpsProxy) {
+    args.push('-x', httpsProxy);
+  } else if (httpProxy) {
+    args.push('-x', httpProxy);
   }
 
   for (const [k, v] of Object.entries(headers)) {

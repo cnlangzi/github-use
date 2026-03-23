@@ -29,10 +29,9 @@ function curl(url, opts = {}) {
   const argsArr = ['curl', '-s', '--max-time', String(timeout)];
   if (method !== 'GET') argsArr.push('-X', method);
 
-  // Auto-detect proxy from env
   const httpProxy = process.env.http_proxy || process.env.HTTP_PROXY ||
-                    process.env.https_proxy || 'http://127.0.0.1:1087';
-  argsArr.push('-x', httpProxy);
+                    process.env.https_proxy || null;
+  if (httpProxy) argsArr.push('-x', httpProxy);
 
   for (const [k, v] of Object.entries(headers)) {
     argsArr.push('-H', `${k}: ${v}`);
