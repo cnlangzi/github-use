@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * GitHub Copilot OAuth Device Code Flow
- * 
+ *
  * Usage:
  *   node scripts/auth.js              # OAuth device code flow (for API access)
  *   node scripts/auth.js --proxy     # Use Copilot Proxy (VSCode extension)
@@ -28,18 +28,18 @@ function curl(url, opts = {}) {
   const { method = 'GET', body, headers = {}, timeout = 30 } = opts;
   const argsArr = ['curl', '-s', '--max-time', String(timeout)];
   if (method !== 'GET') argsArr.push('-X', method);
-  
+
   // Auto-detect proxy from env
   const httpProxy = process.env.http_proxy || process.env.HTTP_PROXY ||
                     process.env.https_proxy || 'http://127.0.0.1:1087';
   argsArr.push('-x', httpProxy);
-  
+
   for (const [k, v] of Object.entries(headers)) {
     argsArr.push('-H', `${k}: ${v}`);
   }
   if (body) argsArr.push('-d', body);
   argsArr.push('--', url);
-  
+
   try {
     const output = execFileSync('curl', argsArr, { encoding: 'utf-8' });
     return { ok: true, data: JSON.parse(output) };
@@ -108,7 +108,7 @@ async function refreshCopilotToken(refreshToken) {
 // ─────────────────────────────────────────────
 async function proxyMode() {
   const PROXY_URL = process.env.COPILOT_PROXY_URL || 'http://localhost:3000/v1';
-  
+
   console.log('🔗 GitHub Copilot via Proxy Mode');
   console.log('   Proxy URL:', PROXY_URL);
   console.log('');
@@ -125,7 +125,7 @@ async function proxyMode() {
   const models = testResp.data?.data || [];
   console.log('✅ Connected! Available models:', models.length);
   models.forEach(m => console.log('  -', m.id || m.model));
-  
+
   // Save proxy config
   const proxyData = { mode: 'proxy', url: PROXY_URL, models: models.map(m => m.id || m.model) };
   try {
@@ -203,7 +203,7 @@ async function oauthMode() {
     if (tokenData.access_token) {
       // Step 3: Get Copilot token
       console.log('✅ GitHub authorization received! Getting Copilot token...');
-      
+
       const copilotResp = curl(COPILOT_TOKEN_URL, {
         headers: {
           'Accept': 'application/json',

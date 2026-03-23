@@ -1,23 +1,23 @@
 # GitHub Copilot - Node.js Tools
 
-与 VSCode Copilot 相同 API 的 Node.js 工具集。支持 gpt-4o、claude-sonnet-4.5 等全部 43 个模型。
+Node.js toolkit using the same API as VSCode Copilot. Supports all 43 models including gpt-4o, claude-sonnet-4.5, and more.
 
-## 快速开始
+## Quick Start
 
 ```bash
 cd ~/workspace/skills/github-use
 npm install
 ```
 
-## 授权
+## Authentication
 
-### 方式 1: OAuth 授权（推荐）
+### Method 1: OAuth (Recommended)
 
 ```bash
 node scripts/auth.js
 ```
 
-输出示例：
+Output example:
 ```
 🔑 GitHub Copilot Auth
 
@@ -33,29 +33,29 @@ node scripts/auth.js
 ✅ Authorization complete!
 ```
 
-授权后 token 自动保存，后续运行无需重复授权。
+Token auto-saved after auth. Subsequent runs require no re-auth.
 
-### 方式 2: 手动设置 Token
+### Method 2: Manual Token
 
 ```bash
 export GITHUB_COPILOT_TOKEN="your-token"
 ```
 
-## 使用方法
+## Usage
 
 ### CLI
 
 ```bash
-# 对话
+# Chat
 node scripts/index.js chat "Hello, how are you?"
 
-# 指定模型
+# Specify model
 node scripts/index.js chat "Write a function" --model gpt-4o
 
-# 翻译
+# Translation
 node scripts/index.js translate "hello world" --to Chinese
 
-# 图像理解
+# Image understanding
 node scripts/index.js image "What is in this image?" /path/to/image.jpg
 ```
 
@@ -64,25 +64,25 @@ node scripts/index.js image "What is in this image?" /path/to/image.jpg
 ```javascript
 import { chat, translate, understandImage } from './scripts/index.js';
 
-// 对话
+// Chat
 const result = await chat('What is 2+2?');
 console.log(result.result.content);
 
-// 翻译
+// Translation
 const translated = await translate('hello', { to: 'Chinese' });
 
-// 图像分析
+// Image analysis
 const described = await understandImage('Describe this', '/path/to/image.jpg');
 ```
 
-## 支持模型
+## Supported Models
 
-通过 `api.githubcopilot.com` 提供全部 43 个模型：
+All 43 models available via `api.githubcopilot.com`:
 
-### GPT 系列
-| 模型 ID | 说明 |
-|---------|------|
-| `gpt-4o` | ✅ 默认，GPT-4o 主模型 |
+### GPT Series
+| Model ID | Description |
+|----------|-------------|
+| `gpt-4o` | ✅ Default, GPT-4o main model |
 | `gpt-4o-2024-11-20` | GPT-4o dated version |
 | `gpt-4o-2024-08-06` | GPT-4o dated version |
 | `gpt-4o-2024-05-13` | GPT-4o dated version |
@@ -103,9 +103,9 @@ const described = await understandImage('Describe this', '/path/to/image.jpg');
 | `gpt-4-turbo` | GPT-4 Turbo |
 | `gpt-3.5-turbo` | GPT-3.5 Turbo |
 
-### Claude 系列
-| 模型 ID | 说明 |
-|---------|------|
+### Claude Series
+| Model ID | Description |
+|----------|-------------|
 | `claude-opus-4.6` | Claude Opus 4.6 |
 | `claude-opus-4.6-fast` | Claude Opus 4.6 Fast |
 | `claude-opus-4.5` | Claude Opus 4.5 |
@@ -114,24 +114,24 @@ const described = await understandImage('Describe this', '/path/to/image.jpg');
 | `claude-sonnet-4` | Claude Sonnet 4 |
 | `claude-haiku-4.5` | Claude Haiku 4.5 |
 
-### Gemini 系列
-| 模型 ID | 说明 |
-|---------|------|
+### Gemini Series
+| Model ID | Description |
+|----------|-------------|
 | `gemini-2.5-pro` | Gemini 2.5 Pro |
 | `gemini-3-pro` | Gemini 3 Pro |
 | `gemini-3-flash` | Gemini 3 Flash |
 | `gemini-3.1-pro-preview` | Gemini 3.1 Pro Preview |
 
-### 其他
-| 模型 ID | 说明 |
-|---------|------|
+### Other
+| Model ID | Description |
+|----------|-------------|
 | `grok-code-fast-1` | Grok Code Fast |
 | `text-embedding-3-small` | Text Embedding 3 Small |
 | `text-embedding-ada-002` | Text Embedding Ada 002 |
 | `oswe-vscode-prime` | OSWE VSCode Prime |
 | `oswe-vscode-secondary` | OSWE VSCode Secondary |
 
-### 使用示例
+### Usage Examples
 
 ```bash
 node scripts/index.js chat "Hello" --model gpt-4o
@@ -139,42 +139,42 @@ node scripts/index.js chat "Hello" --model claude-sonnet-4.5
 node scripts/index.js chat "Hello" --model gemini-2.5-pro
 ```
 
-## 环境变量
+## Environment Variables
 
 ```bash
-# 代理（OAuth 授权需要）
+# Proxy (required for OAuth)
 export http_proxy=http://127.0.0.1:1087
 export https_proxy=http://127.0.0.1:1087
 
-# 或使用其他代理
+# Or use another proxy
 export http_proxy=http://your-proxy:8080
 
-# 手动 token（跳过 OAuth）
+# Manual token (skip OAuth)
 export GITHUB_COPILOT_TOKEN="your-token"
 ```
 
-## Token 管理
+## Token Management
 
-- Token 位置: `~/.config/github-copilot/token.json`
-- 有效期: 约 30 分钟
-- 自动刷新: `scripts/auth.js` 会自动用 GitHub OAuth token 刷新
+- Token location: `~/.config/github-copilot/token.json`
+- Validity: ~30 minutes
+- Auto-refresh: `scripts/auth.js` auto-refreshes using GitHub OAuth token
 
-删除 token 重新授权:
+Delete token to re-auth:
 ```bash
 rm ~/.config/github-copilot/token.json
 node scripts/auth.js
 ```
 
-## 常见问题
+## Troubleshooting
 
-### OAuth 授权失败
-- 确保 `http_proxy` / `https_proxy` 设置正确
-- 代理需要能访问 github.com
+### OAuth auth fails
+- Ensure `http_proxy` / `https_proxy` is set correctly
+- Proxy must be able to reach github.com
 
-### Token 过期
-- 自动刷新机制会处理
-- 如遇问题，删除 `~/.config/github-copilot/token.json` 重新授权
+### Token expired
+- Auto-refresh handles this
+- If issues persist, delete `~/.config/github-copilot/token.json` and re-auth
 
-### Node fetch 失败
-- 所有 API 调用使用 curl，不依赖 Node.js fetch
-- 确保系统安装了 curl
+### Node fetch fails
+- All API calls use curl, not Node.js fetch
+- Ensure curl is installed on the system

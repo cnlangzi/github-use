@@ -1,19 +1,18 @@
 #!/usr/bin/env node
-
 /**
  * GitHub Use - GitHub Copilot AI tools for Node.js
- * 
- * 统一接口:
+ *
+ * Unified interface:
  *   import { chat, translate, understandImage, webSearch } from 'github-use/scripts/index.js';
- * 
- * CLI 用法:
+ *
+ * CLI usage:
  *   node scripts/index.js chat "hello"
  *   node scripts/index.js image "what is this?" /path/to/image.jpg
  *   node scripts/index.js translate "hello" --to Chinese
- * 
- * 认证方式:
- *   1. Device Code Flow (默认): 会打印登录 URL，用户授权后自动完成
- *   2. 直接传 Copilot Token: 设置 GITHUB_COPILOT_TOKEN 环境变量
+ *
+ * Authentication:
+ *   1. Device Code Flow (default): prints login URL, auto-completes after user auth
+ *   2. Direct Copilot Token: set GITHUB_COPILOT_TOKEN env var
  */
 
 import { readFileSync } from 'fs';
@@ -55,7 +54,7 @@ function getBaseUrlFromToken(token) {
 async function getCopilotToken(githubAccessToken, enterpriseDomain) {
   const domain = enterpriseDomain || 'github.com';
   const copilotTokenUrl = `https://api.${domain}/copilot_internal/v2/token`;
-  
+
   const resp = await curlRequest(copilotTokenUrl, {
     headers: {
       'Accept': 'application/json',
@@ -77,19 +76,19 @@ async function getCopilotToken(githubAccessToken, enterpriseDomain) {
 async function curlRequest(url, opts = {}) {
   const { method = 'GET', body, headers = {}, timeout = 30 } = opts;
   const args = ['curl', '-s'];
-  
+
   if (method !== 'GET') {
     args.push('-X', method);
   }
   args.push('--max-time', String(timeout));
-  
+
   // Proxy support
   const httpProxy = process.env.http_proxy || process.env.HTTP_PROXY;
   const httpsProxy = process.env.https_proxy || process.env.HTTPS_PROXY;
   if (httpsProxy || httpProxy) {
     args.push('-x', httpsProxy || httpProxy);
   }
-  
+
   for (const [k, v] of Object.entries(headers)) {
     args.push('-H', `${k}: ${v}`);
   }
@@ -97,7 +96,7 @@ async function curlRequest(url, opts = {}) {
     args.push('-d', body);
   }
   args.push('--', url);
-  
+
   const { execFileSync } = await import('child_process');
   try {
     const output = execFileSync('curl', args, { encoding: 'utf-8' });
@@ -185,7 +184,7 @@ async function pollForAccessToken(domain, deviceCode, interval, expiresIn) {
 async function loginCopilot() {
   const domain = 'github.com';
   const device = await startDeviceFlow(domain);
-  
+
   console.log('🌐 Open this URL in your browser:', device.verification_uri);
   console.log('🔑 Enter code:', device.user_code);
   console.log('⏳ Waiting for authorization...');
@@ -315,7 +314,7 @@ async function chat(message, opts = {}) {
 
   try {
     const token = await getValidToken();
-    
+
     const body = {
       model,
       messages: msgs,

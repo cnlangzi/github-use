@@ -1,124 +1,114 @@
 ---
 name: github-use
-version: 0.2.0
-description: "GitHub Copilot AI tools for Node.js - chat, image understanding, translation. Uses the Copilot API via api.githubcopilot.com"
-metadata:
-  openclaw:
-    requires:
-      env:
-        - GITHUB_COPILOT_TOKEN
-    primaryEnv: GITHUB_COPILOT_TOKEN
-    os:
-      - linux
-      - darwin
-      - win32
+version: 0.3.0
+description: "GitHub Copilot AI tools for Node.js - chat, image understanding, translation. Uses api.githubcopilot.com (same as OpenCode)."
 ---
 
 # GitHub Use - Node.js AI Tools
 
-GitHub Copilot 工具集，提供对话、图像理解、翻译等功能。使用 `api.githubcopilot.com` 端点（与 OpenCode 相同）。
+GitHub Copilot toolkit providing chat, image understanding, and translation via `api.githubcopilot.com`.
 
-## 统一接口
+## Unified Interface
 
 ```javascript
 import { chat, translate, understandImage, webSearch } from 'github-use/scripts/index.js';
 
-// 对话
-await chat('你好');                              // 简单对话
-await chat('写代码', { model: 'gpt-4o' });     // 指定模型
+// Chat
+await chat('Hello');                              // simple chat
+await chat('Write code', { model: 'gpt-4o' }); // specify model
 
-// 图像理解
-await understandImage('图片里有什么?', '/path/to/image.jpg');
+// Image understanding
+await understandImage('What is in this image?', '/path/to/image.jpg');
 
-// 翻译
+// Translation
 await translate('hello', { to: 'Chinese' });
 
-// 搜索（基于模型知识库）
-await webSearch('今日新闻');
+// Web search (model knowledge base)
+await webSearch('today news');
 ```
 
-## 返回格式
+## Return Format
 
 ```javascript
-// 成功
+// Success
 { success: true, result: { content: '...' } }
 
-// 失败
+// Failure
 { success: false, error: 'error message' }
 ```
 
-## CLI 用法
+## CLI Usage
 
 ```bash
 cd ~/workspace/skills/github-use
 
-# 对话
-node scripts/index.js chat "你好"
+# Chat
+node scripts/index.js chat "Hello"
 
-# 图像理解
-node scripts/index.js image "描述图片" /path/to/image.jpg
+# Image understanding
+node scripts/index.js image "Describe image" /path/to/image.jpg
 
-# 翻译
+# Translation
 node scripts/index.js translate "hello" --to Chinese
 
-# 搜索
+# Search
 node scripts/index.js search "news"
 ```
 
-## 认证方式
+## Authentication
 
-### 方式 1: OAuth 授权（推荐，自动管理 token）
+### Method 1: OAuth (Recommended, auto-manages tokens)
 ```bash
 node scripts/auth.js
 ```
-- 自动打开浏览器授权 or 打印验证码
-- Token 自动保存到 `~/.config/github-copilot/token.json`
-- Token 过期后自动刷新
+- Opens browser for auth or prints verification code
+- Token auto-saved to `~/.config/github-copilot/token.json`
+- Token refreshed automatically on expiry
 
-### 方式 2: 直接传 Copilot Token
+### Method 2: Direct Copilot Token
 ```bash
 export GITHUB_COPILOT_TOKEN="your-copilot-token"
 ```
 
-### 方式 3: GitHub OAuth Token
+### Method 3: GitHub OAuth Token
 ```bash
 export GH_TOKEN="ghu_xxx"  # GitHub OAuth token
 ```
 
-## 环境变量
+## Environment Variables
 
-| 变量 | 默认值 | 说明 |
-|------|--------|------|
-| `GITHUB_COPILOT_TOKEN` | - | Copilot 直接访问 token |
-| `GH_TOKEN` / `GITHUB_TOKEN` | - | GitHub Token（用于刷新 token） |
-| `http_proxy` / `https_proxy` | `http://127.0.0.1:1087` | 代理（OAuth 需要） |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `GITHUB_COPILOT_TOKEN` | - | Direct Copilot token |
+| `GH_TOKEN` / `GITHUB_TOKEN` | - | GitHub Token (for token refresh) |
+| `http_proxy` / `https_proxy` | `http://127.0.0.1:1087` | Proxy (required for OAuth) |
 
-## 支持模型
+## Supported Models
 
-通过 `api.githubcopilot.com` 提供全部 43 个模型：
+All 43 models available via `api.githubcopilot.com`:
 
-| 模型 | 说明 |
-|------|------|
-| `gpt-4o` | GPT-4o 主模型 |
+| Model | Description |
+|-------|-------------|
+| `gpt-4o` | GPT-4o main model |
 | `gpt-4o-mini` | GPT-4o Mini |
 | `gpt-4.1` | GPT-4.1 |
-| `gpt-5` | GPT-5 系列 |
+| `gpt-5` | GPT-5 series |
 | `claude-sonnet-4.5` | Claude Sonnet 4.5 |
 | `claude-sonnet-4` | Claude Sonnet 4 |
 | `claude-opus-4.5` | Claude Opus 4.5 |
 | `gemini-2.5-pro` | Gemini 2.5 Pro |
 
-默认模型: `gpt-4o`（所有函数默认）
+Default model: `gpt-4o` (all functions)
 
-## 安装依赖
+## Install Dependencies
 
 ```bash
 cd ~/workspace/skills/github-use
 npm install
 ```
 
-## 注意事项
+## Notes
 
-- OAuth 授权需要代理（确保 `http_proxy` 环境变量指向可访问 GitHub 的代理）
-- Token 有效期约 30 分钟，过期自动刷新
-- Node.js fetch 通过 HTTP 代理访问 HTTPS 有问题，所有 API 调用使用 curl
+- OAuth requires a proxy (`http_proxy` must reach GitHub)
+- Token valid ~30 minutes, auto-refreshed
+- All API calls use curl (Node.js fetch has issues with HTTP proxy to HTTPS)
