@@ -1,0 +1,17 @@
+{
+  "name": "github-use",
+  "version": "0.1.0",
+  "description": "GitHub Copilot AI tools for Node.js - chat, image understanding, translation",
+  "type": "module",
+  "main": "scripts/index.js",
+  "bin": {
+    "github-copilot": "./scripts/index.js"
+  },
+  "dependencies": {
+    "minimist": "^1.2.8",
+    "openai": "^6.32.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
